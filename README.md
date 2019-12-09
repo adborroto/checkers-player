@@ -1,6 +1,7 @@
-# checkers-player
-Artificial player for checkers that using Minimax
+# Checkers 
+Artificial player for checkers game using Minimax for minimizing the possible loss for a worst case
 
-![alt text](./numbered-board.gifraw=true "Numbered board")
+# Numbered Board
+![alt text](https://github.com/AlejandroDominguez/checkers-player/blob/master/numbered-board.gif)
 
 
