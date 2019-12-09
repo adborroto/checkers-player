@@ -95,7 +95,7 @@ namespace Checkers
                 ScoreAmountTiles(game,color) + 
                 ScoreQueens(game,color) + 
                 ScoreDefenceLinePosition(game,color) +
-                ScoreUnprotectedPosition(game, color) +
+                ScoreCenterAdvantage(game, color) +
                 ScoreMoveAmount(game,color);
         }
 
@@ -130,9 +130,12 @@ namespace Checkers
             return amountDefending;
         }
 
-        static int ScoreUnprotectedPosition(Game game, Tile color)
+        static int ScoreCenterAdvantage(Game game, Tile color)
         {
-            return 0;
+            var mePieces = game.GetPositions(Helper.GetTileColors(color));
+            var goodTiles = new[] { 14, 18, 15, 19 };
+            var amount = mePieces.Select(x => goodTiles.Contains(x.Number)).Count();
+            return amount;
         }
 
         static int ScoreMoveAmount(Game game, Tile color)

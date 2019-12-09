@@ -21,9 +21,9 @@ namespace Checkers
                 Console.WriteLine($"Play: {color}");
                 Console.WriteLine(board);
                 Console.WriteLine();
-                
-                
-                var suggestedMove = Player.NextBestMove(board, color,3);
+
+
+                var suggestedMove = Player.NextBestMove(board, color, 4);
                 Console.WriteLine("Ale robot suggest to move: " + suggestedMove);
                 Console.WriteLine(
                     $"Choose an option: {Environment.NewLine}\t " +
@@ -52,7 +52,7 @@ namespace Checkers
                     board = board.Move(moves[int.Parse(option)]);
                     color = Helper.ChangeColor(color);
                 }
-                else if(optionSelected == "3")
+                else if (optionSelected == "3")
                 {
                     var undoMove = game.Pop();
                     board = undoMove.Item1;
