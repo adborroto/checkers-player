@@ -103,13 +103,13 @@ namespace Checkers
                     case Tile.Empty:
                         return " ";
                     case Tile.White:
-                        return "x";
+                        return "w";
                     case Tile.Black:
-                        return "o";
+                        return "b";
                     case Tile.QueenWhite:
-                        return "X";
+                        return "W";
                     case Tile.QueenBlack:
-                        return "O";
+                        return "B";
                     default:
                         return null;
                 }

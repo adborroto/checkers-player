@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Checkers;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Checkers.Tests
 {

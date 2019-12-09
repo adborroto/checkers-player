@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Checkers
 {
@@ -6,51 +8,57 @@ namespace Checkers
     {
         static void Main(string[] args)
         {
+            var game = new Stack<Tuple<Game, Tile>>();
             var board = Game.NewGame();
-            var moves = 0;
-            var tileColor = Tile.White;
+            var color = Tile.White;
+
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
 
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine($"Play: {color}");
                 Console.WriteLine(board);
                 Console.WriteLine();
                 
-                var pieceColor = moves % 2 == 0 ? "WHITE" : "BLACK";
                 
-                Console.WriteLine($"{pieceColor}");
-                var suggestedMove = Player.NextBestMove(board, tileColor, 4);
+                var suggestedMove = Player.NextBestMove(board, color,3);
                 Console.WriteLine("Ale robot suggest to move: " + suggestedMove);
-                Console.WriteLine($"Choose an option: {Environment.NewLine}\t 1)Apply move {Environment.NewLine}\t 2)Pick a move {Environment.NewLine}\t 3)List moves");
+                Console.WriteLine(
+                    $"Choose an option: {Environment.NewLine}\t " +
+                    $"1)Play suggested move {Environment.NewLine}\t " +
+                    $"2)Play custom move {Environment.NewLine}\t " +
+                    $"3)Undo last move{Environment.NewLine}\t ");
+
                 var optionSelected = Console.ReadLine();
                 if (optionSelected == "1")
                 {
-                    board = board.Move(suggestedMove);
-                    moves++;
-                    tileColor = tileColor == Tile.White ? Tile.Black : Tile.White;
-                }
-                else if (optionSelected == "3")
-                {
-                    foreach (var move in Player.Moves(board,tileColor))
-                    {
-                        Console.WriteLine(move);
-                    }
-                    Console.Read();
-                }
-                else
-                {
-                    Console.WriteLine("Write a move:");
-                    var customMoveString = Console.ReadLine();
-                    if(Move.TryParseMove(customMoveString, out Move move))
-                    {
-                        board = board.Move(move);
-                    }
-                    moves++;
-                    tileColor = tileColor == Tile.White ? Tile.Black : Tile.White;
-                }
-                
-            }
+                    game.Push(new Tuple<Game, Tile>(board, color));
 
+                    board = board.Move(suggestedMove);
+                    color = Helper.ChangeColor(color);
+                }
+                else if (optionSelected == "2")
+                {
+                    game.Push(new Tuple<Game, Tile>(board, color));
+
+                    var moves = Player.Moves(board, color).ToArray();
+                    for (int i = 0; i < moves.Length; i++)
+                    {
+                        Console.WriteLine($"{i}) " + moves[i]);
+                    }
+                    var option = Console.ReadLine();
+                    board = board.Move(moves[int.Parse(option)]);
+                    color = Helper.ChangeColor(color);
+                }
+                else if(optionSelected == "3")
+                {
+                    var undoMove = game.Pop();
+                    board = undoMove.Item1;
+                    color = undoMove.Item2;
+                }
+            }
         }
     }
 }
