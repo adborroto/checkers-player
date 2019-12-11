@@ -18,7 +18,7 @@ namespace Checkers
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"Play: {color}");
+                Console.WriteLine($"Play: {color} -> {Player.Score(board, color)} points");
                 Console.WriteLine(board);
                 Console.WriteLine();
 

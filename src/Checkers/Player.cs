@@ -87,19 +87,22 @@ namespace Checkers
         {
            return moves.Select(x => new { Move = x, I = Guid.NewGuid() }).OrderBy(x => x.I).Select(x=>x.Move);
         }
-       
 
-        private static int Score(Game game, Tile color)
+
+        public static int Score(Game game, Tile color)
         {
-            return 
-                ScoreAmountTiles(game,color) + 
-                ScoreQueens(game,color) + 
-                ScoreDefenceLinePosition(game,color) +
-                ScoreCenterAdvantage(game, color) +
-                ScoreMoveAmount(game,color);
+            var tiles = game.GetPositions(Helper.GetTileColors(color)).Count() + game.GetPositions(Helper.GetTileColors(Helper.ChangeColor(color))).Count();
+            var stage = tiles / 10 + 1;
+
+            return
+                (stage * 50) * ScoreDiferentBettwenPieces(game, color) +
+                ((5 - stage) * 50) * ScoreQueens(game, color) +
+                ((5 - stage)) * ScoreDefenceLinePosition(game, color) +
+                ((5 - stage)) * ScoreCenterAdvantage(game, color) +
+                ((5 - stage)) * ScoreMoveAmount(game, color);
         }
 
-        static int ScoreAmountTiles(Game game, Tile color)
+        static int ScoreDiferentBettwenPieces(Game game, Tile color)
         {
             var mePieces = game.GetPositions(Helper.GetTileColors(color));
             var otherPieces = game.GetPositions(Helper.GetTileColors(Helper.ChangeColor(color)));
@@ -114,9 +117,10 @@ namespace Checkers
             var mePieces = game.GetPositions(Helper.GetTileColors(color));
             var otherPieces = game.GetPositions(Helper.GetTileColors(Helper.ChangeColor(color)));
 
-            var meQueens = mePieces.Select(x => game.GetTile(x)).Count(x => (int)x > 5) * 5;
-            var otherQueens = otherPieces.Select(x => game.GetTile(x)).Count(x => (int)x > 5) * 5;
-            var diferentBetwwenQueens = meQueens - otherQueens;
+            var meQueens = mePieces.Select(x => game.GetTile(x)).Count(x => (int)x > 5);
+            var otherQueens = otherPieces.Select(x => game.GetTile(x)).Count(x => (int)x > 5);
+            var diferentBetwwenQueens = (meQueens - otherQueens);
+            
             return diferentBetwwenQueens;
         }
 

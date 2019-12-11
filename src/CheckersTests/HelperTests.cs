@@ -121,5 +121,63 @@ namespace Checkers.Tests
             Assert.AreEqual(move.To.Number, 18);
         }
 
+        [TestMethod()]
+        public void Should_move_white_queen_foward()
+        {
+            var board = Game.Empty();
+            board.Set(29, Tile.QueenWhite);
+
+            var moves = Helper.CalculateMoves(board, Position.FromNumber(29));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 25));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 22));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 18));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 15));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 11));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 8));
+            Assert.IsTrue(moves.Any(x=>x.To.Number == 4));
+        }
+
+        [TestMethod()]
+        public void Should_move_black_queen_foward()
+        {
+            var board = Game.Empty();
+            board.Set(29, Tile.QueenBlack);
+
+            var moves = Helper.CalculateMoves(board, Position.FromNumber(29));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 25));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 22));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 18));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 15));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 11));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 8));
+            Assert.IsTrue(moves.Any(x => x.To.Number == 4));
+        }
+
+        [TestMethod()]
+        public void Should_eat_with_white_queen()
+        {
+            var board = Game.Empty();
+            board.Set(22, Tile.QueenWhite);
+            board.Set(25, Tile.Black);
+
+            var moves = Helper.CalculateMoves(board, Position.FromNumber(22));
+            var eat = moves.First() as Eat;
+            Assert.AreEqual(29, eat.To.Number);
+        }
+
+        [TestMethod()]
+        public void Should_triple_eat_with_white_queen()
+        {
+            var board = Game.Empty();
+            board.Set(29, Tile.QueenWhite);
+            board.Set(18, Tile.Black);
+            board.Set(19, Tile.Black);
+            board.Set(27, Tile.Black);
+
+            var moves = Helper.CalculateMoves(board, Position.FromNumber(29));
+            var eat = moves.First() as Eat;
+            Assert.AreEqual(3, eat.Eaten.Count());
+        }
+
     }
 }
